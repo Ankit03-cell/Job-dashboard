@@ -1,5 +1,17 @@
 {
-  "rewrites": [
-    { "source": "/api/generate", "destination": "/api/generate" }
+  "version": 2,
+  "framework": null,
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "builds": [
+    { "src": "api/generate.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "app.js", "use": "@vercel/static" },
+    { "src": "manifest.json", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/generate", "dest": "/api/generate.js" },
+    { "handle": "filesystem" },
+    { "src": "/", "dest": "/index.html" }
   ]
 }
