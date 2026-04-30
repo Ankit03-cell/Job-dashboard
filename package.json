@@ -1,0 +1,13 @@
+{
+  "name": "data-mastery-dashboard",
+  "version": "0.1.0",
+  "description": "28-day Data Career dashboard with AI storyteller (local dev server)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.4.1"
+  }
+}
