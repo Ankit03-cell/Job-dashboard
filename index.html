@@ -3,164 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#06080f">
+    <meta name="description" content="28-Day Data Career Sprint — track your progress from Python to ML in a premium interactive dashboard.">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Data Career Command Center | Mastery Edition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Data Mastery — 28-Day Career Sprint</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root{
-            --bg:#0f172a;
-            --card:#0b1220;
-            --muted:#94a3b8;
-            --accent:#14b8a6;
-            --accent-weak: rgba(20,184,166,0.08);
-            --glass: rgba(255,255,255,0.03);
-        }
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: #f8fafc; -webkit-font-smoothing:antialiased }
-        .chart-container { position: relative; width: 100%; height: 200px; margin: auto; }
-        .day-card { transition: all 0.18s ease; border: 1px solid rgba(255,255,255,0.04); cursor: pointer; background: linear-gradient(180deg,var(--card), rgba(11,18,32,0.6)); }
-        .day-card:hover { border-color: #14b8a6; background: #111b2d; transform: translateY(-2px); }
-        .day-completed { border-color: var(--accent) !important; background: var(--accent-weak) !important; }
-        .tag { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; }
-        .tag-yt { background: #fee2e2; color: #991b1b; }
-        .tag-read { background: #dcfce7; color: #166534; }
-        .tag-practice { background: #e0f2fe; color: #075985; }
-        .spinner { border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 50%; border-top: 2px solid #14b8a6; width: 14px; height: 14px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .day-card:focus { outline: 3px solid rgba(20,184,166,0.18); box-shadow: 0 4px 18px rgba(2,6,23,0.6); }
-        #chartPct { font-size: 1.15rem; font-weight: 900; color: #e6fffa; }
-        #aiResponse { max-height: 160px; overflow: auto; white-space: pre-wrap; }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-        /* Mobile friendly touch targets */
-        .day-card { padding: 1rem; min-height: 110px; }
-        input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); }
-        .tag { font-size: 0.6rem }
-        /* Week button progress badge */
-        .week-badge { display:inline-flex; align-items:center; gap:8px }
-        .week-progress { height:6px; background:rgba(255,255,255,0.06); border-radius:999px; width:80px; overflow:hidden }
-        .week-progress > i { display:block; height:100%; background:var(--accent); width:0%; transition:width 240ms ease }
-        /* responsive tweaks */
-        @media (max-width:768px){
-            #chartPct{ font-size:1rem }
-            .md\:w-1\/3{ width:100% }
-            .lg\:col-span-2{ grid-column: span 1 / span 1 }
-            .grid-cols-1.md\:grid-cols-2{ grid-template-columns: repeat(2, minmax(0,1fr)) }
-        }
-    </style>
-    <style>
-        /* Toasts */
-        #toast-container { position: fixed; right: 16px; bottom: 20px; z-index: 60; display:flex; flex-direction:column; gap:8px; }
-        .toast { background: rgba(10,15,20,0.9); color: #e6fffa; padding: 10px 14px; border-radius: 10px; box-shadow: 0 6px 18px rgba(2,6,23,0.6); transform: translateY(8px) scale(.98); opacity:0; animation: toastIn 240ms forwards; display:flex; gap:8px; align-items:center }
-        .toast.info { background: linear-gradient(90deg,#0ea5a4,#34d399); color:#042a26 }
-        .toast.success { background: linear-gradient(90deg,#10b981,#34d399); color:#042a26 }
-        .toast .icon { width:18px; height:18px; flex:0 0 18px }
-        @keyframes toastIn { to { transform:none; opacity:1 } }
-    </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <nav class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-teal-500 rounded flex items-center justify-center text-slate-900 font-black italic">M</div>
-                <span class="font-extrabold tracking-tighter text-lg uppercase italic">Data<span class="text-teal-500">Mastery</span></span>
+<div class="app-container">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <div class="navbar-brand">
+                <div class="navbar-logo">D</div>
+                <div class="navbar-title">Data<span>Mastery</span></div>
             </div>
-            <div class="flex items-center gap-4">
-                <p id="globalPct" class="text-xs font-black text-teal-500">0% COMPLETE</p>
-                <div class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></div>
+            <div class="navbar-status">
+                <div class="xp-section" id="xpSection">
+                    <span class="xp-level-badge" id="xpLevelBadge">Lv.1 Rookie</span>
+                    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
+                    <span class="xp-text" id="xpText">0 XP</span>
+                </div>
+                <span id="globalPct" class="navbar-pct">0% Complete</span>
+                <div class="navbar-dot"></div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 py-8 space-y-12">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 flex items-center gap-8 shadow-2xl">
-                <div class="w-32 h-32 relative">
-                    <canvas id="progressChart"></canvas>
-                    <div class="absolute inset-0 flex items-center justify-center"><span id="chartPct" class="text-xl font-black">0%</span></div>
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Stat Cards -->
+        <div class="stats-grid">
+            <div class="stat-card" id="stat-days">
+                <div class="progress-ring-wrap">
+                    <svg width="48" height="48" viewBox="0 0 48 48">
+                        <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs>
+                        <circle class="progress-ring-bg" cx="24" cy="24" r="20"/>
+                        <circle class="progress-ring-fill" id="progressRing" cx="24" cy="24" r="20" stroke-dasharray="125.66" stroke-dashoffset="125.66"/>
+                    </svg>
+                    <div class="progress-ring-text" id="ringPct">0%</div>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold">28-Day Sprint</h3>
-                    <p class="text-xs text-slate-400">4-6 Hours Daily Commitment</p>
+                    <div class="stat-label">Days Completed</div>
+                    <div class="stat-value" id="statDays">0 / 28</div>
                 </div>
             </div>
-
-            <div class="lg:col-span-2 bg-teal-600 rounded-3xl p-8 text-slate-900 flex flex-col md:flex-row gap-8 relative overflow-hidden">
-                    <div class="z-10 flex-grow space-y-4">
-                    <h3 class="font-black text-xl">✨ AI Career Storyteller</h3>
-                    <p class="text-sm font-bold text-teal-900/70">Turn findings into resume-ready business insights.</p>
-                    <div class="flex gap-2">
-                        <input id="aiInput" type="text" placeholder="Paste technical result here..." class="flex-grow bg-white/20 border border-teal-400 rounded-xl px-4 py-2 text-sm placeholder-teal-900/50 outline-none focus:ring-2 focus:ring-white">
-                                <button id="aiBtn" onclick="askAI()" aria-label="Generate AI insight" class="bg-slate-900 text-white px-6 py-2 rounded-xl text-xs font-black hover:bg-slate-800 transition flex items-center gap-2"><span id="spin" class="spinner hidden"></span> STORYTELL</button>
-                    </div>
+            <div class="stat-card" id="stat-tasks">
+                <div class="stat-icon violet">✓</div>
+                <div>
+                    <div class="stat-label">Tasks Done</div>
+                    <div class="stat-value" id="statTasks">0</div>
                 </div>
-                        <div id="aiResponse" role="status" aria-live="polite" class="z-10 md:w-1/3 bg-slate-900/10 rounded-2xl p-4 text-[10px] italic font-bold border border-white/10 flex items-center justify-center">// Results here...</div>
+            </div>
+            <div class="stat-card" id="stat-streak">
+                <div class="stat-icon teal">🔥</div>
+                <div>
+                    <div class="stat-label">Current Streak</div>
+                    <div class="stat-value" id="statStreak">0 days</div>
+                </div>
+            </div>
+            <div class="stat-card" id="stat-overall">
+                <div class="stat-icon violet">📊</div>
+                <div>
+                    <div class="stat-label">Overall Progress</div>
+                    <div class="stat-value gradient" id="statOverall">0%</div>
+                </div>
             </div>
         </div>
 
-        <div id="curriculum" class="space-y-16 pb-20"></div>
+        <!-- Achievement Badges -->
+        <div class="badges-section" id="badgesSection"></div>
+
+        <!-- Motivational Quote -->
+        <div class="quote-card" id="quoteCard">
+            <div class="quote-icon">💡</div>
+            <div>
+                <div class="quote-text" id="quoteText">Loading inspiration...</div>
+                <div class="quote-author" id="quoteAuthor"></div>
+            </div>
+        </div>
+
+        <!-- AI Storyteller -->
+        <div class="ai-card">
+            <div class="ai-card-header">
+                <h3>✨ AI Career Storyteller</h3>
+                <span class="ai-badge">Powered by Gemini</span>
+            </div>
+            <p class="ai-card-sub">Transform your technical findings into polished, resume-ready business impact statements.</p>
+            <div class="ai-input-row">
+                <input id="aiInput" type="text" class="ai-input" placeholder="Paste a technical result or metric here...">
+                <button id="aiBtn" onclick="askAI()" aria-label="Generate AI insight" class="ai-btn">
+                    <span id="spin" class="spinner hidden"></span>
+                    Generate Insight
+                </button>
+            </div>
+            <div id="aiResponse" role="status" aria-live="polite" class="ai-response">Your AI-generated business insight will appear here...</div>
+        </div>
+
+        <!-- Curriculum Section -->
+        <div class="section-header">
+            <h2>28-Day Learning Path</h2>
+            <p>Master data science from foundations to career launch — one week at a time.</p>
+        </div>
+
+        <!-- Week Tabs -->
+        <div class="week-tabs" id="weekTabs"></div>
+
+        <!-- Week Panels -->
+        <div id="curriculum"></div>
+
     </main>
 
-    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+</div>
 
-    <script>
-        // Minimal bootstrap data for app.js (exposed on window)
-        window.model = "gemini-2.5-flash-preview-09-2025";
-        window.curriculumData = [
-            {
-                week: 1, title: "Python for Data Science (Deep Mastery)", goal: "Transition from DSA logic to data-centric manipulation using Pandas.",
-                days: [
-                    { day: 1, topic: "Pandas Foundations", tasks: ["DataFrame structures", "loc/iloc deep dive"], links: [{ name: "Corey Schafer (Pandas)", url: "https://www.youtube.com/watch?v=ZyhVh-qRZPA", type: "yt" }, { name: "Indexing Docs", url: "https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html", type: "read" }] },
-                    { day: 2, topic: "Advanced Manipulation", tasks: ["Groupby Deep Dive", "Pivot Tables"], links: [{ name: "Keith Galli (Pandas)", url: "https://www.youtube.com/watch?v=WGoZueTo_rU", type: "yt" }] },
-                    { day: 3, topic: "Cleaning Lab", tasks: ["Missing Values", "Regex"], links: [{ name: "Krish Naik (Feature Eng)", url: "https://www.youtube.com/watch?v=p_tpQSY1aTs", type: "yt" }] },
-                    { day: 4, topic: "EDA Workflow", tasks: ["Correlation", "Outliers"], links: [{ name: "Kaggle Titanic", url: "https://www.kaggle.com/c/titanic", type: "practice" }] },
-                    { day: 5, topic: "Viz Theory", tasks: ["Seaborn Mastery", "Chart Junk"], links: [{ name: "Storytelling w/ Data", url: "https://www.youtube.com/@storytellingwithdata", type: "yt" }] },
-                    { day: 6, topic: "Capstone 1", tasks: ["Full Notebook", "Insights"], links: [{ name: "Datasets", url: "https://www.kaggle.com/datasets", type: "practice" }] },
-                    { day: 7, topic: "GitHub Prep", tasks: ["Professional README", "Pushing"], links: [{ name: "Luke Barousse (Portfolio)", url: "https://www.youtube.com/watch?v=27f8K-U0uQ8", type: "yt" }] }
-                ]
-            },
-            {
-                week: 2, title: "Advanced SQL for Analytics", goal: "Master complex SQL required for FAANG-level interviews.",
-                days: [
-                    { day: 8, topic: "Advanced Joins", tasks: ["Self-Joins", "Sets"], links: [{ name: "Ankit Bansal (Joins)", url: "https://www.youtube.com/@AnkitBansal", type: "yt" }] },
-                    { day: 9, topic: "Window Functions", tasks: ["RANK", "LEAD/LAG"], links: [{ name: "Ankit Bansal (Windows)", url: "https://www.youtube.com/watch?v=Ww71knvhQ-s", type: "yt" }, { name: "Data Lemur", url: "https://datalemur.com/questions", type: "practice" }] },
-                    { day: 10, topic: "CTEs & Querying", tasks: ["WITH Clause", "Recursive"], links: [{ name: "Alex Analyst (CTEs)", url: "https://www.youtube.com/watch?v=S7vJmXp_v30", type: "yt" }] },
-                    { day: 11, topic: "SQL Cases", tasks: ["Churn", "Retention"], links: [{ name: "StrataScratch", url: "https://www.stratascratch.com/", type: "practice" }] },
-                    { day: 12, topic: "Performance", tasks: ["Indexing", "Plans"], links: [{ name: "Index Luke", url: "https://use-the-index-luke.com/", type: "read" }] },
-                    { day: 13, topic: "Mock Speedrun", tasks: ["5 Hards / 2 Hours"], links: [{ name: "LeetCode SQL", url: "https://leetcode.com/problemset/database/", type: "practice" }] },
-                    { day: 14, topic: "SQL Capstone", tasks: ["Reporting DB Schema"], links: [] }
-                ]
-            },
-            {
-                week: 3, title: "Stats, BI & Business Logic", goal: "Mathematically validate findings and communicate them.",
-                days: [
-                    { day: 15, topic: "Descriptive Stats", tasks: ["Variance", "IQR"], links: [{ name: "StatQuest", url: "https://www.youtube.com/@statquest", type: "yt" }] },
-                    { day: 16, topic: "Inferential", tasks: ["P-values", "Testing"], links: [{ name: "P-values Explained", url: "https://www.youtube.com/watch?v=vemZtEM63GY", type: "yt" }] },
-                    { day: 17, topic: "A/B Testing", tasks: ["Design", "Power"], links: [{ name: "Emma Ding (A/B)", url: "https://www.youtube.com/@EmmaDing", type: "yt" }] },
-                    { day: 18, topic: "BI Foundations", tasks: ["LOD", "Calculations"], links: [{ name: "Alex Analyst (Tableau)", url: "https://www.youtube.com/@AlexTheAnalyst", type: "yt" }] },
-                    { day: 19, topic: "Advanced Story", tasks: ["UX", "Filters"], links: [{ name: "Chandoo (BI)", url: "https://www.youtube.com/@chandoo_org", type: "yt" }] },
-                    { day: 20, topic: "Case Logic", tasks: ["Market Sizing", "SWOT"], links: [{ name: "Victor Cheng", url: "https://www.caseinterview.com/", type: "read" }] },
-                    { day: 21, topic: "Dashboard Project", tasks: ["Executive Story"], links: [] }
-                ]
-            },
-            {
-                week: 4, title: "ML & Career Launch", goal: "Build predictive models and finalize your market profile.",
-                days: [
-                    { day: 22, topic: "Regression", tasks: ["Linear", "Logistic"], links: [{ name: "StatQuest (Regression)", url: "https://www.youtube.com/@statquest", type: "yt" }] },
-                    { day: 23, topic: "Metrics", tasks: ["F1", "Recall"], links: [{ name: "Evaluation Metrics", url: "https://www.youtube.com/watch?v=HBi-P5j0Kec", type: "yt" }] },
-                    { day: 24, topic: "Tree Models", tasks: ["Random Forest"], links: [{ name: "Trees Intuition", url: "https://www.youtube.com/watch?v=7VeUPuFGJHk", type: "yt" }] },
-                    { day: 25, topic: "ML Workflow", tasks: ["Pipelines", "Tuning"], links: [{ name: "Sklearn Docs", url: "https://scikit-learn.org/stable/", type: "read" }] },
-                    { day: 26, topic: "Portfolio 2", tasks: ["Predictive Model"], links: [{ name: "Kaggle ML", url: "https://www.kaggle.com/learn", type: "practice" }] },
-                    { day: 27, topic: "ATS Resume", tasks: ["Impact Bullets"], links: [{ name: "Ken Jee", url: "https://www.youtube.com/@KenJee_DS", type: "yt" }] },
-                    { day: 28, topic: "STAR Method", tasks: ["Behavioral Prep"], links: [] }
-                ]
-            }
-        ];
-    </script>
-    <script src="app.js"></script>
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+<div id="confetti-container"></div>
+
+<!-- Level-Up Modal -->
+<div id="levelupModal" class="levelup-overlay" style="display:none">
+    <div class="levelup-card">
+        <div class="levelup-emoji">🚀</div>
+        <div class="levelup-title" id="levelupTitle">Level Up!</div>
+        <div class="levelup-sub" id="levelupSub">You've reached a new rank.</div>
+        <button class="levelup-btn" onclick="closeLevelUp()">Continue</button>
+    </div>
+</div>
+
+<!-- Focus Timer -->
+<div class="timer-toggle" id="timerToggle" onclick="openTimer()">⏱</div>
+<div class="timer-panel collapsed" id="timerPanel">
+    <div class="timer-header">
+        <span class="timer-header-title">⏱ Focus Timer</span>
+        <span class="timer-close" onclick="closeTimer()">✕</span>
+    </div>
+    <div class="timer-body">
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-label" id="timerLabel">Focus Session</div>
+        <div class="timer-controls">
+            <button class="timer-btn primary" id="timerStartBtn" onclick="toggleTimer()">Start</button>
+            <button class="timer-btn" onclick="resetTimer()">Reset</button>
+        </div>
+    </div>
+    <div class="timer-sessions">
+        <span class="timer-sessions-label">Sessions today</span>
+        <span class="timer-sessions-count" id="timerSessions">0</span>
+    </div>
+</div>
+
+<script>
+    // Bootstrap data
+    window.model = "gemini-2.5-flash-preview-09-2025";
+    window.curriculumData = [
+        {
+            week: 1, title: "Python for Data Science (Deep Mastery)", goal: "Transition from DSA logic to data-centric manipulation using Pandas.",
+            days: [
+                { day: 1, topic: "Pandas Foundations", tasks: ["DataFrame structures", "loc/iloc deep dive"], links: [{ name: "Corey Schafer (Pandas)", url: "https://www.youtube.com/watch?v=ZyhVh-qRZPA", type: "yt" }, { name: "Indexing Docs", url: "https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html", type: "read" }] },
+                { day: 2, topic: "Advanced Manipulation", tasks: ["Groupby Deep Dive", "Pivot Tables"], links: [{ name: "Keith Galli (Pandas)", url: "https://www.youtube.com/watch?v=WGoZueTo_rU", type: "yt" }] },
+                { day: 3, topic: "Cleaning Lab", tasks: ["Missing Values", "Regex"], links: [{ name: "Krish Naik (Feature Eng)", url: "https://www.youtube.com/watch?v=p_tpQSY1aTs", type: "yt" }] },
+                { day: 4, topic: "EDA Workflow", tasks: ["Correlation", "Outliers"], links: [{ name: "Kaggle Titanic", url: "https://www.kaggle.com/c/titanic", type: "practice" }] },
+                { day: 5, topic: "Viz Theory", tasks: ["Seaborn Mastery", "Chart Junk"], links: [{ name: "Storytelling w/ Data", url: "https://www.youtube.com/@storytellingwithdata", type: "yt" }] },
+                { day: 6, topic: "Capstone 1", tasks: ["Full Notebook", "Insights"], links: [{ name: "Datasets", url: "https://www.kaggle.com/datasets", type: "practice" }] },
+                { day: 7, topic: "GitHub Prep", tasks: ["Professional README", "Pushing"], links: [{ name: "Luke Barousse (Portfolio)", url: "https://www.youtube.com/watch?v=27f8K-U0uQ8", type: "yt" }] }
+            ]
+        },
+        {
+            week: 2, title: "Advanced SQL for Analytics", goal: "Master complex SQL required for FAANG-level interviews.",
+            days: [
+                { day: 8, topic: "Advanced Joins", tasks: ["Self-Joins", "Sets"], links: [{ name: "Ankit Bansal (Joins)", url: "https://www.youtube.com/@AnkitBansal", type: "yt" }] },
+                { day: 9, topic: "Window Functions", tasks: ["RANK", "LEAD/LAG"], links: [{ name: "Ankit Bansal (Windows)", url: "https://www.youtube.com/watch?v=Ww71knvhQ-s", type: "yt" }, { name: "Data Lemur", url: "https://datalemur.com/questions", type: "practice" }] },
+                { day: 10, topic: "CTEs & Querying", tasks: ["WITH Clause", "Recursive"], links: [{ name: "Alex Analyst (CTEs)", url: "https://www.youtube.com/watch?v=S7vJmXp_v30", type: "yt" }] },
+                { day: 11, topic: "SQL Cases", tasks: ["Churn", "Retention"], links: [{ name: "StrataScratch", url: "https://www.stratascratch.com/", type: "practice" }] },
+                { day: 12, topic: "Performance", tasks: ["Indexing", "Plans"], links: [{ name: "Index Luke", url: "https://use-the-index-luke.com/", type: "read" }] },
+                { day: 13, topic: "Mock Speedrun", tasks: ["5 Hards / 2 Hours"], links: [{ name: "LeetCode SQL", url: "https://leetcode.com/problemset/database/", type: "practice" }] },
+                { day: 14, topic: "SQL Capstone", tasks: ["Reporting DB Schema"], links: [] }
+            ]
+        },
+        {
+            week: 3, title: "Stats, BI & Business Logic", goal: "Mathematically validate findings and communicate them.",
+            days: [
+                { day: 15, topic: "Descriptive Stats", tasks: ["Variance", "IQR"], links: [{ name: "StatQuest", url: "https://www.youtube.com/@statquest", type: "yt" }] },
+                { day: 16, topic: "Inferential", tasks: ["P-values", "Testing"], links: [{ name: "P-values Explained", url: "https://www.youtube.com/watch?v=vemZtEM63GY", type: "yt" }] },
+                { day: 17, topic: "A/B Testing", tasks: ["Design", "Power"], links: [{ name: "Emma Ding (A/B)", url: "https://www.youtube.com/@EmmaDing", type: "yt" }] },
+                { day: 18, topic: "BI Foundations", tasks: ["LOD", "Calculations"], links: [{ name: "Alex Analyst (Tableau)", url: "https://www.youtube.com/@AlexTheAnalyst", type: "yt" }] },
+                { day: 19, topic: "Advanced Story", tasks: ["UX", "Filters"], links: [{ name: "Chandoo (BI)", url: "https://www.youtube.com/@chandoo_org", type: "yt" }] },
+                { day: 20, topic: "Case Logic", tasks: ["Market Sizing", "SWOT"], links: [{ name: "Victor Cheng", url: "https://www.caseinterview.com/", type: "read" }] },
+                { day: 21, topic: "Dashboard Project", tasks: ["Executive Story"], links: [] }
+            ]
+        },
+        {
+            week: 4, title: "ML & Career Launch", goal: "Build predictive models and finalize your market profile.",
+            days: [
+                { day: 22, topic: "Regression", tasks: ["Linear", "Logistic"], links: [{ name: "StatQuest (Regression)", url: "https://www.youtube.com/@statquest", type: "yt" }] },
+                { day: 23, topic: "Metrics", tasks: ["F1", "Recall"], links: [{ name: "Evaluation Metrics", url: "https://www.youtube.com/watch?v=HBi-P5j0Kec", type: "yt" }] },
+                { day: 24, topic: "Tree Models", tasks: ["Random Forest"], links: [{ name: "Trees Intuition", url: "https://www.youtube.com/watch?v=7VeUPuFGJHk", type: "yt" }] },
+                { day: 25, topic: "ML Workflow", tasks: ["Pipelines", "Tuning"], links: [{ name: "Sklearn Docs", url: "https://scikit-learn.org/stable/", type: "read" }] },
+                { day: 26, topic: "Portfolio 2", tasks: ["Predictive Model"], links: [{ name: "Kaggle ML", url: "https://www.kaggle.com/learn", type: "practice" }] },
+                { day: 27, topic: "ATS Resume", tasks: ["Impact Bullets"], links: [{ name: "Ken Jee", url: "https://www.youtube.com/@KenJee_DS", type: "yt" }] },
+                { day: 28, topic: "STAR Method", tasks: ["Behavioral Prep"], links: [] }
+            ]
+        }
+    ];
+</script>
+<script src="app.js"></script>
 </body>
 </html>
